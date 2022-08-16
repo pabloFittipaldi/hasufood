@@ -67,7 +67,7 @@
           <form action="" method="post" class="fontRoboto">
             <input
               v-model="formulario.nombre"
-              :class="{ error: errores?.includes('nombre') }"
+              :class="{ error: validate.nombre.$error }"
               type="text"
               id="nombre"
               name="nombre"
@@ -75,14 +75,37 @@
               minlength="3"
               maxlength="30"
             />
-
-            <input v-model="formulario.email" type="email" id="email" name="email" placeholder="Correo" minlength="1" maxlength="60" required />
-
-            <input v-model="formulario.telefono" type="tel" id="telefono" name="telefono" placeholder="Teléfono" minlength="5" maxlength="20" required />
-
-            <input v-model="formulario.consulta" id="consulta" name="consulta" required placeholder="Consulta" />
-
-            <input @click.prevent="enviarfomulario" id="submit" name="submit" type="submit" value="ENVIAR" minlength="4" maxlength="200" />
+            <span :class="{ 'text-danger': validate.nombre.$error }"> {{ validate.nombre.$errors[0]?.$message }}</span>
+            <input
+              v-model="formulario.email"
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Correo"
+              minlength="1"
+              maxlength="60"
+              required
+              :class="{ error: validate.email.$error }"
+            />
+            <span :class="{ 'text-danger': validate.email.$error }"> {{ validate.email.$errors[0]?.$message }}</span>
+            <input
+              v-model="formulario.telefono"
+              type="tel"
+              id="telefono"
+              name="telefono"
+              placeholder="Teléfono"
+              minlength="5"
+              maxlength="20"
+              required
+              :class="{ error: validate.telefono.$error }"
+            />
+            <span :class="{ 'text-danger': validate.telefono.$error }"> {{ validate.telefono.$errors[0]?.$message }}</span>
+            <input v-model="formulario.consulta" id="consulta" name="consulta" required placeholder="Consulta" :class="{ error: validate.consulta.$error }" />
+            <span :class="{ 'text-danger': validate.consulta.$error }"> {{ validate.consulta.$errors[0]?.$message }}</span>
+            <input v-if="!loading" @click.prevent="enviarfomulario" id="submit" name="submit" type="submit" value="ENVIAR" minlength="4" maxlength="200" />
+            <div v-else class="spinner-border"></div>
+            <span v-if="error" class="text-danger"> Error al enviar el correo</span>
+            <span v-if="success" class="text-success"> Se envio correctamente</span>
           </form>
         </div>
       </div>
@@ -101,38 +124,85 @@
 <script setup>
 import navegacionComponents from "@/components/navegacionComponents.vue";
 import footerComponents from "@/components/footerComponents.vue";
-import { reactive, ref } from "@vue/reactivity";
-
+import { reactive, ref, toRefs } from "@vue/reactivity";
+import { required, minLength, helpers, email } from "@vuelidate/validators";
+import { useVuelidate } from "@vuelidate/core";
+import axios from "axios";
 const formulario = reactive({
   nombre: "",
-  email: "",
   telefono: "",
+  email: "",
   consulta: "",
 });
-const errores = ref([]);
-const validarFormulario = () => {
-  if (formulario.nombre == "" || formulario.nombre.length < 4) {
-    errores.value.push("nombre");
-  }
-  if (formulario.email == "" || formulario.email < 4) {
-    errores.value.push("email");
-  }
-  if (formulario.telefono == "" || formulario.telefono.length < 9) {
-    errores.value.push("nombre");
-  }
-  if (formulario.consulta == "") {
-    errores.value.push("consulta");
-  }
-  if (errores.value.length > 0) {
-    return false;
-  }
-  return true;
+const errorsText = {
+  required: "El campo es requerido",
+  minLength: (length) => {
+    return `El campo debe tener al menos ${length} caracteres`;
+  },
+  email: "El campo debe ser un correo válido",
 };
-const enviarfomulario = () => {
-  if (validarFormulario()) {
-    alert("Formulario Enviado con Éxito");
-    return;
+const rules = {
+  nombre: {
+    required: helpers.withMessage(() => errorsText.required, required),
+    minLength: helpers.withMessage(({ $params }) => errorsText.minLength($params.min), minLength(4)),
+  },
+  telefono: {
+    required: helpers.withMessage(() => errorsText.required, required),
+    minLength: helpers.withMessage(({ $params }) => errorsText.minLength($params.min), minLength(9)),
+  },
+  email: {
+    required: helpers.withMessage(() => errorsText.required, required),
+    email: helpers.withMessage(() => errorsText.email, email),
+  },
+  consulta: {
+    required: helpers.withMessage(() => errorsText.required, required),
+  },
+};
+const error = ref(false);
+const success = ref(false);
+const loading = ref(false);
+const validate = useVuelidate(rules, toRefs(formulario));
+const enviarfomulario = async () => {
+  try {
+    error.value = false;
+    loading.value = true;
+    validate.value.$touch();
+    if (validate.value.$invalid) {
+      return false;
+    }
+    await axios.post("https://mailsapp.herokuapp.com/email/", {
+      nombre: formulario.nombre,
+      telefono: formulario.telefono,
+      email: formulario.email,
+      subject: formulario.consulta,
+    });
+    success.value = true;
+    limpiarFormulario();
+  } catch (error) {
+    error.value = true;
+  } finally {
+    loading.value = false;
   }
-  alert("Llena tus campos");
+};
+const limpiarFormulario = () => {
+  formulario.nombre = "";
+  formulario.telefono = "";
+  formulario.email = "";
+  formulario.consulta = "";
+  validate.value.$reset();
 };
 </script>
+
+<style scoped>
+.spinner-border {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  vertical-align: -0.125em;
+  border: 0.25em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  -webkit-animation: 0.75s linear infinite spinner-border;
+  animation: 0.75s linear infinite spinner-border;
+}
+</style>
