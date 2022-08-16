@@ -3,12 +3,7 @@
     <div @click="mostrarMenu" class="menuHamburguesa">
       <img src="@/assets/img/menu.png" alt="Menu" />
     </div>
-    <div
-      class="navegacion"
-      id="navegacion"
-      :class="{ mostrar: mostrar }"
-      ref="scrollNav"
-    >
+    <div class="navegacion" id="navegacion" :class="{ mostrar: mostrar }" ref="scrollNav">
       <ul>
         <li>
           <a href="/">Inicio</a>
@@ -38,9 +33,7 @@
           </p>
         </div>
         <div class="btn">
-          <a href="https://wa.link/wfn0ov"
-            ><button>CONTACTA UN ASESOR</button></a
-          >
+          <a href="https://wa.link/wfn0ov"><button>CONTACTA UN ASESOR</button></a>
         </div>
       </div>
       <div class="contenidoImagenHead">

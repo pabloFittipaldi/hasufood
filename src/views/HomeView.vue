@@ -2,49 +2,23 @@
   <div class="contenedorInicio">
     <navegacionComponents />
 
-    <div
-      id="carouselExampleControls"
-      class="carousel slide"
-      data-bs-ride="carousel"
-    >
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img
-            src="@/assets/img/descartablesslice.jpg"
-            class="d-block w-100"
-            alt="..."
-          />
+          <img src="@/assets/img/descartablesslice.jpg" class="d-block w-100" alt="..." />
         </div>
         <div class="carousel-item">
-          <img
-            src="@/assets/img/descartablesslice1.jpg"
-            class="d-block w-100"
-            alt="..."
-          />
+          <img src="@/assets/img/descartablesslice1.jpg" class="d-block w-100" alt="..." />
         </div>
         <div class="carousel-item">
-          <img
-            src="@/assets/img/descartablesslice2.jpg"
-            class="d-block w-100"
-            alt="..."
-          />
+          <img src="@/assets/img/descartablesslice2.jpg" class="d-block w-100" alt="..." />
         </div>
       </div>
-      <button
-        class="carousel-control-prev carousel-dark"
-        type="button"
-        data-bs-target="#carouselExampleControls"
-        data-bs-slide="prev"
-      >
+      <button class="carousel-control-prev carousel-dark" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button
-        class="carousel-control-next carousel-dark"
-        type="button"
-        data-bs-target="#carouselExampleControls"
-        data-bs-slide="next"
-      >
+      <button class="carousel-control-next carousel-dark" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
@@ -102,45 +76,13 @@
               maxlength="30"
             />
 
-            <input
-              v-model="formulario.email"
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Correo"
-              minlength="1"
-              maxlength="60"
-              required
-            />
+            <input v-model="formulario.email" type="email" id="email" name="email" placeholder="Correo" minlength="1" maxlength="60" required />
 
-            <input
-              v-model="formulario.telefono"
-              type="tel"
-              id="telefono"
-              name="telefono"
-              placeholder="Teléfono"
-              minlength="5"
-              maxlength="20"
-              required
-            />
+            <input v-model="formulario.telefono" type="tel" id="telefono" name="telefono" placeholder="Teléfono" minlength="5" maxlength="20" required />
 
-            <input
-              v-model="formulario.consulta"
-              id="consulta"
-              name="consulta"
-              required
-              placeholder="Consulta"
-            />
+            <input v-model="formulario.consulta" id="consulta" name="consulta" required placeholder="Consulta" />
 
-            <input
-              @click.prevent="enviarfomulario"
-              id="submit"
-              name="submit"
-              type="submit"
-              value="ENVIAR"
-              minlength="4"
-              maxlength="200"
-            />
+            <input @click.prevent="enviarfomulario" id="submit" name="submit" type="submit" value="ENVIAR" minlength="4" maxlength="200" />
           </form>
         </div>
       </div>
