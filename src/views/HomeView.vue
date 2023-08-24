@@ -24,12 +24,6 @@
       </button>
     </div>
 
-    <section class="ofertas" id="ofertas">
-      <div>
-        <img src="@/assets/img/ofertas.png" alt="" />
-      </div>
-    </section>
-
     <section class="contenedorInfo">
       <div class="flex space-beetwen">
         <div class="contenidoInfoLogo">

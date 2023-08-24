@@ -9,9 +9,6 @@
           <a href="/">Inicio</a>
         </li>
         <li>
-          <a href="#ofertas">Ofertas</a>
-        </li>
-        <li>
           <a href="/nosotros">Nosotros</a>
         </li>
         <li>
